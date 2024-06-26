@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 require('dotenv').config();
 const http = require('http');
@@ -41,9 +40,9 @@ sequelize.authenticate()
     .catch(err => console.log('Error: ' + err));
 
 // Routes
-app.use('/users', auth, UserRoutes);
-app.use('/sessions', auth, SessionRoutes);
-app.use('/auth', AuthRoutes);
+app.use('/users', auth, UserRoutes);        // Protect the users route
+app.use('/sessions', auth, SessionRoutes);  // Protect the sessions route
+app.use('/auth', AuthRoutes);               // Do not protect auth routes (login and register)
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

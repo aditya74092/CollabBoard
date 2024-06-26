@@ -3,9 +3,18 @@ import axios from 'axios';
 import Whiteboard from './Whiteboard';
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5001'
+    baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
 });
-//comment
+
+// Function to set the token in the headers
+const setAuthToken = token => {
+    if (token) {
+        api.defaults.headers.common['x-auth-token'] = token;
+    } else {
+        delete api.defaults.headers.common['x-auth-token'];
+    }
+};
+
 function App() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,8 +22,10 @@ function App() {
 
     const register = async () => {
         try {
-            const res = await api.post('/users/register', { username, password });
-            console.log('User registered:', res.data.data);
+            const res = await api.post('/auth/register', { username, password });
+            console.log('User registered:', res.data);
+            localStorage.setItem('token', res.data.token); // Store the token in local storage
+            setAuthToken(res.data.token); // Set the token in headers
         } catch (error) {
             console.error('Error registering user:', error.response ? error.response.data : error.message);
         }
@@ -22,10 +33,11 @@ function App() {
 
     const login = async () => {
         try {
-            const res = await api.post('/users/login', { username, password });
-            console.log('User logged in:', res.data.data);
-            setIsLoggedIn(true);
+            const res = await api.post('/auth/login', { username, password });
+            console.log('User logged in:', res.data);
             localStorage.setItem('token', res.data.token); // Store the token in local storage
+            setAuthToken(res.data.token); // Set the token in headers
+            setIsLoggedIn(true);
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
         }
@@ -57,4 +69,3 @@ function App() {
 }
 
 export default App;
-// Trigger new deployment
