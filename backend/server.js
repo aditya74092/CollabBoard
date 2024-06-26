@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 require('dotenv').config();
 const http = require('http');
@@ -9,6 +10,8 @@ const Session = require('./models/Session');
 const UserRoutes = require('./routes/users');
 const SessionRoutes = require('./routes/sessions');
 const AuthRoutes = require('./routes/auth');
+const auth = require('./middleware/auth');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,8 +41,8 @@ sequelize.authenticate()
     .catch(err => console.log('Error: ' + err));
 
 // Routes
-app.use('/users', UserRoutes);
-app.use('/sessions', SessionRoutes);
+app.use('/users', auth, UserRoutes);
+app.use('/sessions', auth, SessionRoutes);
 app.use('/auth', AuthRoutes);
 
 const PORT = process.env.PORT || 5001;
