@@ -13,7 +13,7 @@ const Whiteboard = () => {
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
-        const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
+        const newSocket = io('http://localhost:5001');
         setSocket(newSocket);
         console.log('Socket connected');
 
@@ -73,43 +73,44 @@ const Whiteboard = () => {
     };
 
     const saveSession = async () => {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
-        const data = canvasRef.current.toDataURL();
-        try {
-            await axios.post('https://collabboard-backend.onrender.com/sessions/save', { data, roomId }, {
-                headers: {
-                    'x-auth-token': token
-                }
-            });
-            alert('Session saved successfully');
-        } catch (error) {
-            console.error('Error saving session:', error);
-            alert('Error saving session');
-        }
-    };
-
-    const loadSession = async () => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.get(`https://collabboard-backend.onrender.com/sessions/load/${roomId}`, {
-                headers: {
-                    'x-auth-token': token
-                }
-            });
-            const data = response.data[0].data;
-            const img = new Image();
-            img.src = data;
-            img.onload = () => {
-                const canvas = canvasRef.current;
-                const context = canvas.getContext('2d');
-                context.drawImage(img, 0, 0);
-            };
-        } catch (error) {
-            console.error('Error loading session:', error);
-            alert('Error loading session');
-        }
-    };
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      const data = canvasRef.current.toDataURL();
+      try {
+          await axios.post('http://localhost:5001/sessions/save', { data, roomId }, {
+              headers: {
+                  'x-auth-token': token
+              }
+          });
+          alert('Session saved successfully');
+      } catch (error) {
+          console.error('Error saving session:', error);
+          alert('Error saving session');
+      }
+  };
+  
+  const loadSession = async () => {
+      const token = localStorage.getItem('token');
+      try {
+          const response = await axios.get(`http://localhost:5001/sessions/load/${roomId}`, {
+              headers: {
+                  'x-auth-token': token
+              }
+          });
+          const data = response.data[0].data;
+          const img = new Image();
+          img.src = data;
+          img.onload = () => {
+              const canvas = canvasRef.current;
+              const context = canvas.getContext('2d');
+              context.drawImage(img, 0, 0);
+          };
+      } catch (error) {
+          console.error('Error loading session:', error);
+          alert('Error loading session');
+      }
+  };
+  
 
     useEffect(() => {
         if (socket) {
