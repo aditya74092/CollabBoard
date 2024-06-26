@@ -4,7 +4,7 @@
   "description": "CollabBoard-Desc",
   "main": "index.js",
   "scripts": {
-      "test": "jest",
+    "test": "jest",
     "start": "node server.js",
     "start-react": "webpack serve --mode development --open --hot"
   },

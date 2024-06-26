@@ -1,9 +1,0 @@
-{
-  "build": {
-    "builder": "DOCKER",
-    "command": "docker build -t collabboard-backend ."
-  },
-  "start": {
-    "command": "docker run -p 3000:3000 collabboard-backend"
-  }
-}
