@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Whiteboard from './Whiteboard';
 
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5001'
+});
+
 function App() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -9,7 +13,7 @@ function App() {
 
     const register = async () => {
         try {
-            const res = await axios.post('http://localhost:5001/users/register', { username, password });
+            const res = await api.post('/users/register', { username, password });
             console.log('User registered:', res.data.data);
         } catch (error) {
             console.error('Error registering user:', error.response ? error.response.data : error.message);
@@ -17,16 +21,15 @@ function App() {
     };
 
     const login = async () => {
-      try {
-          const res = await axios.post('http://localhost:5001/users/login', { username, password });
-          console.log('User logged in:', res.data.data);
-          setIsLoggedIn(true);
-          localStorage.setItem('token', res.data.token); // Store the token in local storage
-      } catch (error) {
-          console.error('Error logging in:', error.response ? error.response.data : error.message);
-      }
-  };
-  
+        try {
+            const res = await api.post('/users/login', { username, password });
+            console.log('User logged in:', res.data.data);
+            setIsLoggedIn(true);
+            localStorage.setItem('token', res.data.token); // Store the token in local storage
+        } catch (error) {
+            console.error('Error logging in:', error.response ? error.response.data : error.message);
+        }
+    };
 
     return (
         <div>
