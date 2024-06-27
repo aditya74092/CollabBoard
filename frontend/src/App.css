@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 /* General Styles */
 body {
   margin: 0;
@@ -32,6 +34,7 @@ body {
 .auth-container h1, .auth-container h3 {
   margin-bottom: 20px;
   color: #333;
+  font-family: 'Pacifico', cursive; /* Apply the cursive font to the heading */
 }
 
 .auth-form {
