@@ -183,7 +183,7 @@ const Whiteboard = ({ onLogout }) => {
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
                     </div>
             )}
-            {eraser && (
+            {erase && (
                 <div className="eraser">
                     
                      <button className="control-button small" onClick={()=>handleColorChange(null,true)}>Erase</button>
