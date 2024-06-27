@@ -15,6 +15,7 @@ const Whiteboard = ({ onLogout }) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [erase, setErase] = useState(false);
     const [loading, setLoading] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
@@ -34,6 +35,11 @@ const Whiteboard = ({ onLogout }) => {
     }, [socket, roomId]);
 
     const startDrawing = ({ nativeEvent }) => {
+        const { offsetX, offsetY } = nativeEvent;
+        setIsDrawing(true);
+        setLastPosition({ x: offsetX, y: offsetY });
+    };
+    const eraseDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
         setIsDrawing(true);
         setLastPosition({ x: offsetX, y: offsetY });
@@ -66,8 +72,11 @@ const Whiteboard = ({ onLogout }) => {
         setIsDrawing(false);
     };
 
-    const handleColorChange = (color) => {
+    const handleColorChange = (color,erase) => {
+        if(erase)setColor("#FFF");
+        else
         setColor(color.hex);
+
     };
 
     const handleLineWidthChange = (event) => {
@@ -97,6 +106,7 @@ const Whiteboard = ({ onLogout }) => {
             setLoading(false);
         }
     };
+    
 
     const loadSession = async () => {
         const token = localStorage.getItem('token');
@@ -173,13 +183,30 @@ const Whiteboard = ({ onLogout }) => {
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
                     </div>
             )}
+            {eraser && (
+                <div className="eraser">
+                    
+                     <button className="control-button small" onClick={()=>handleColorChange(null,true)}>Erase</button>
+                    </div>
+            )}
             <canvas
+
+            
+
                 ref={canvasRef}
                 width={1200}
                 height={800}
+
+                //check if it is eraser then 
+                change color
+
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
                 onMouseMove={handleMouseMove}
+                
+
+                
+
                 className="whiteboard"
             />
         </div>
