@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Whiteboard from './Whiteboard';
+import './App.css'; // Import the new CSS file for styling
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
@@ -44,17 +45,16 @@ function App() {
     };
 
     return (
-        <div>
-            <h1>CollabBoard</h1>
+        <div className="app-container">
             {!isLoggedIn ? (
-                <div>
-                    <div>
+                <div className="auth-container">
+                    <div className="auth-form">
                         <h2>Register</h2>
                         <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         <button onClick={register}>Register</button>
                     </div>
-                    <div>
+                    <div className="auth-form">
                         <h2>Login</h2>
                         <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />

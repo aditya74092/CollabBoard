@@ -1,0 +1,38 @@
+.whiteboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.whiteboard-header {
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.room-input {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.control-button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.whiteboard {
+    border: 1px solid #000;
+}

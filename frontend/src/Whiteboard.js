@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { SketchPicker } from 'react-color';
+import './Whiteboard.css'; // Import the new CSS file
 
 const Whiteboard = () => {
     const canvasRef = useRef(null);
@@ -11,6 +12,7 @@ const Whiteboard = () => {
     const [roomId, setRoomId] = useState('');
     const [isDrawing, setIsDrawing] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
+    const [showColorPicker, setShowColorPicker] = useState(false);
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -121,24 +123,34 @@ const Whiteboard = () => {
     }, [socket]);
 
     return (
-        <div>
-            <h1>CollabBoard</h1>
-            <input
-                type="text"
-                placeholder="Enter Room ID"
-                value={roomId}
-                onChange={handleRoomIdChange}
-            />
-            <button onClick={saveSession}>Save Session</button>
-            <button onClick={loadSession}>Load Session</button>
-            <SketchPicker color={color} onChangeComplete={handleColorChange} />
-            <input
-                type="range"
-                min="1"
-                max="10"
-                value={lineWidth}
-                onChange={handleLineWidthChange}
-            />
+        <div className="whiteboard-container">
+            <header className="whiteboard-header">
+                <h1>CollabBoard</h1>
+            </header>
+            <div className="controls">
+                <input
+                    type="text"
+                    placeholder="Enter Room ID"
+                    value={roomId}
+                    onChange={handleRoomIdChange}
+                    className="room-input"
+                />
+                <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}>Color Picker</button>
+                <button className="control-button" onClick={saveSession}>Save Session</button>
+                <button className="control-button" onClick={loadSession}>Load Session</button>
+            </div>
+            {showColorPicker && (
+                <div className="color-picker">
+                    <SketchPicker color={color} onChangeComplete={handleColorChange} />
+                    <input
+                        type="range"
+                        min="1"
+                        max="10"
+                        value={lineWidth}
+                        onChange={handleLineWidthChange}
+                    />
+                </div>
+            )}
             <canvas
                 ref={canvasRef}
                 onMouseDown={startDrawing}
@@ -146,10 +158,10 @@ const Whiteboard = () => {
                 onMouseMove={handleMouseMove}
                 width={800}
                 height={600}
-                style={{ border: '1px solid #000' }}
+                className="whiteboard"
             />
         </div>
     );
 };
-//as
+
 export default Whiteboard;
