@@ -50,6 +50,13 @@ function App() {
         }
     };
 
+    const logout = () => {
+        localStorage.removeItem('token');
+        setAuthToken(null);
+        setIsLoggedIn(false);
+        setMessage('');
+    };
+
     return (
         <div className="app-container">
             {!isLoggedIn ? (
@@ -75,7 +82,7 @@ function App() {
                     )}
                 </div>
             ) : (
-                <Whiteboard />
+                <Whiteboard onLogout={logout} />
             )}
         </div>
     );

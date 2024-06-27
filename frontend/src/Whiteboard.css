@@ -13,6 +13,12 @@
     font-family: 'Arial', sans-serif;
     font-size: 36px;
     color: #333;
+    text-align: center;
+}
+
+.whiteboard-header p {
+    font-size: 18px;
+    color: #666;
 }
 
 .controls {
@@ -22,19 +28,20 @@
 }
 
 .control-button {
-    padding: 10px 20px;
+    padding: 5px 10px; /* Smaller buttons */
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 18px;
 }
 
 .control-button:hover {
     background-color: #0056b3;
 }
 
-.color-picker {
+.color-picker, .settings {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -51,16 +58,6 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 100%;
-}
-
-.settings {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .whiteboard {

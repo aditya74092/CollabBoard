@@ -3,8 +3,9 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import './Whiteboard.css'; // Import the new CSS file
 import { SketchPicker } from 'react-color';
+import { FiSettings, FiEdit3 } from 'react-icons/fi';
 
-const Whiteboard = () => {
+const Whiteboard = ({ onLogout }) => {
     const canvasRef = useRef(null);
     const [color, setColor] = useState('#000000');
     const [lineWidth, setLineWidth] = useState(2);
@@ -76,7 +77,6 @@ const Whiteboard = () => {
     };
 
     const saveSession = async () => {
-        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         const data = canvasRef.current.toDataURL();
         try {
@@ -126,11 +126,13 @@ const Whiteboard = () => {
     return (
         <div className="whiteboard-container">
             <header className="whiteboard-header">
-               
+                <h1>Collab-Board</h1>
+                <p>Multiple users can collaborate in real-time.</p>
             </header>
             <div className="controls">
-                <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}>Color Picker</button>
-                <button className="control-button" onClick={() => setShowSettings(!showSettings)}>Settings</button>
+                <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
+                <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
+                <button className="control-button" onClick={onLogout}>Logout</button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
@@ -142,7 +144,7 @@ const Whiteboard = () => {
                         value={lineWidth}
                         onChange={handleLineWidthChange}
                     />
-                    <button onClick={() => setShowColorPicker(false)}>Close</button>
+                    <button onClick={() => setShowColorPicker(false)}>Close Picker</button>
                 </div>
             )}
             {showSettings && (
@@ -156,6 +158,7 @@ const Whiteboard = () => {
                     />
                     <button className="control-button" onClick={saveSession}>Save Session</button>
                     <button className="control-button" onClick={loadSession}>Load Session</button>
+                    <button className="control-button" onClick={() => setShowSettings(false)}>Close Settings</button>
                 </div>
             )}
             <canvas
