@@ -201,7 +201,7 @@ const Whiteboard = ({ onLogout }) => {
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
                 onMouseMove={handleMouseMove}
-                className={`whiteboard ${erase ? 'eraser' : ''}`} // Apply the eraser class if erase mode is active
+                className="whiteboard"
             />
         </div>
     );
