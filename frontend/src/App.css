@@ -47,6 +47,16 @@ body {
   flex-direction: column;
   align-items: center;
 }
+.auth-form button {
+  width: 70%; /* Reduced width by 30% */
+  max-width: 300px;
+  padding: 7px; /* Reduced padding by 30% */
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.7em; /* Reduced font size by 30% */
+}
 
 .auth-form h2 {
   margin-bottom: 10px;
