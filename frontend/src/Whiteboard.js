@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import './Whiteboard.css'; // Import the new CSS file
 import { SketchPicker } from 'react-color';
-import { FiSettings, FiEdit3 } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
 
 const Whiteboard = ({ onLogout }) => {
     const canvasRef = useRef(null);
@@ -77,8 +77,7 @@ const Whiteboard = ({ onLogout }) => {
     };
 
     const saveSession = async () => {
-      const userId = localStorage.getItem('userId');
-
+        const userId = localStorage.getItem('userId'); // Add this line back
         const token = localStorage.getItem('token');
         const data = canvasRef.current.toDataURL();
         try {
@@ -129,12 +128,12 @@ const Whiteboard = ({ onLogout }) => {
         <div className="whiteboard-container">
             <header className="whiteboard-header">
                 <h1>Collab-Board</h1>
-                <p>Multiple users can collaborate in real-time.</p>
+                <p>Collaborate in real-time with multiple users.</p>
+                <button className="logout-button" onClick={onLogout}><FiLogOut /></button>
             </header>
             <div className="controls">
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
-                <button className="control-button" onClick={onLogout}>Logout</button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
@@ -146,7 +145,7 @@ const Whiteboard = ({ onLogout }) => {
                         value={lineWidth}
                         onChange={handleLineWidthChange}
                     />
-                    <button onClick={() => setShowColorPicker(false)}>Close Picker</button>
+                    <button className="close-button" onClick={() => setShowColorPicker(false)}>Close Picker</button>
                 </div>
             )}
             {showSettings && (
@@ -158,9 +157,9 @@ const Whiteboard = ({ onLogout }) => {
                         onChange={handleRoomIdChange}
                         className="room-input"
                     />
-                    <button className="control-button" onClick={saveSession}>Save Session</button>
-                    <button className="control-button" onClick={loadSession}>Load Session</button>
-                    <button className="control-button" onClick={() => setShowSettings(false)}>Close Settings</button>
+                    <button className="control-button small" onClick={saveSession}>Save Session</button>
+                    <button className="control-button small" onClick={loadSession}>Load Session</button>
+                    <button className="close-button" onClick={() => setShowSettings(false)}>Close Settings</button>
                 </div>
             )}
             <canvas
