@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
 import { SketchPicker } from 'react-color';
-import 'react-toastify/dist/ReactToastify.css';
 import './Whiteboard.css'; // Import the new CSS file
 
 const Whiteboard = ({ onLogout }) => {
@@ -90,10 +89,10 @@ const Whiteboard = ({ onLogout }) => {
                     'x-auth-token': token
                 }
             });
-            toast.success('Session saved successfully');
+            toast.success('Session saved successfully', { containerId: 'mainToastContainer' });
         } catch (error) {
             console.error('Error saving session:', error);
-            toast.error('Error saving session');
+            toast.error('Error saving session', { containerId: 'mainToastContainer' });
         } finally {
             setLoading(false);
         }
@@ -116,10 +115,10 @@ const Whiteboard = ({ onLogout }) => {
                 const context = canvas.getContext('2d');
                 context.drawImage(img, 0, 0);
             };
-            toast.success('Session loaded successfully');
+            toast.success('Session loaded successfully', { containerId: 'mainToastContainer' });
         } catch (error) {
             console.error('Error loading session:', error);
-            toast.error('Error loading session');
+            toast.error('Error loading session', { containerId: 'mainToastContainer' });
         } finally {
             setLoading(false);
         }
@@ -136,7 +135,6 @@ const Whiteboard = ({ onLogout }) => {
 
     return (
         <div className="whiteboard-container">
-            <ToastContainer />
             {loading && <div className="loading">Loading...</div>}
             <header className="whiteboard-header">
                 <h1>Collab-Board</h1>
@@ -169,11 +167,9 @@ const Whiteboard = ({ onLogout }) => {
                         onChange={handleRoomIdChange}
                         className="room-input"
                     />
-                    <li></li>
                     <button className="control-button small" onClick={saveSession}>Save Session</button>
-                    <li></li>
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
-                    <button className="close-button" onClick={() => setShowSettings(false)}>Close</button>
+                    <button className="close-button" onClick={() => setShowSettings(false)}>Close Settings</button>
                 </div>
             )}
             <canvas
