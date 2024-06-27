@@ -9,10 +9,10 @@
 
 .auth-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
 }
 
 .auth-form {
@@ -21,32 +21,76 @@
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form h2 {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .auth-form input {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 200px;
+  width: 250px;
 }
 
 .auth-form button {
-  padding: 10px 20px;
+  padding: 10px 25px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
 }
 
 .auth-form button:hover {
   background-color: #0056b3;
+}
+
+.control-button {
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  background-color: #ddd;
+}
+
+.whiteboard-header {
+  margin-bottom: 20px;
+}
+
+.controls {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.room-input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.whiteboard {
+  border: 1px solid #000;
 }

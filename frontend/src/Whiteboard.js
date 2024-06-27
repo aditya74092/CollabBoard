@@ -1,18 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { SketchPicker } from 'react-color';
 import './Whiteboard.css'; // Import the new CSS file
+import { SketchPicker } from 'react-color';
 
 const Whiteboard = () => {
     const canvasRef = useRef(null);
-    const [color, setColor] = useState('#000');
+    const [color, setColor] = useState('#000000');
     const [lineWidth, setLineWidth] = useState(2);
     const [socket, setSocket] = useState(null);
     const [roomId, setRoomId] = useState('');
     const [isDrawing, setIsDrawing] = useState(false);
-    const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
     const [showColorPicker, setShowColorPicker] = useState(false);
+    const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -149,15 +149,16 @@ const Whiteboard = () => {
                         value={lineWidth}
                         onChange={handleLineWidthChange}
                     />
+                    <button onClick={() => setShowColorPicker(false)}>Close</button>
                 </div>
             )}
             <canvas
                 ref={canvasRef}
+                width={800}
+                height={600}
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
                 onMouseMove={handleMouseMove}
-                width={800}
-                height={600}
                 className="whiteboard"
             />
         </div>
