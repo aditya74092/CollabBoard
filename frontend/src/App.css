@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
-  background-image: url('https://blog.dailylogochallenge.com/wp-content/uploads/2020/03/sketchbook-wireframes.jpg'); /* Replace with your desired background image URL */
+  background-image: url('https://source.unsplash.com/featured/?nature'); /* Replace with your desired background image URL */
   background-size: cover;
   background-position: center;
 }
@@ -257,4 +257,97 @@ body {
   justify-content: center;
   font-size: 1.5em;
   z-index: 1000;
+}
+
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f9fc;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container Styles */
+.app-container {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.auth-container {
+  padding: 20px;
+}
+
+/* Header Styles */
+.auth-container h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.auth-form h2 {
+  font-size: 1.2em;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* Input Styles */
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+/* Button Styles */
+.auth-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #0056b3;
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+.secondary-button:hover {
+  background-color: #5a6268;
+}
+
+/* Message Styles */
+.message {
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-bottom: 20px;
 }
