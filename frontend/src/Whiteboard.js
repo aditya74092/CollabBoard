@@ -77,6 +77,8 @@ const Whiteboard = ({ onLogout }) => {
     };
 
     const saveSession = async () => {
+      const userId = localStorage.getItem('userId');
+
         const token = localStorage.getItem('token');
         const data = canvasRef.current.toDataURL();
         try {
