@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSettings, FiEdit3, FiLogOut, FiEraser } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
+import { FaEraser } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
 import './Whiteboard.css'; // Import the new CSS file
 
@@ -165,7 +166,7 @@ const Whiteboard = ({ onLogout }) => {
             <div className="controls">
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
-                <button className="control-button" onClick={toggleEraser}><FiEraser /></button>
+                <button className="control-button" onClick={toggleEraser}><FaEraser /></button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
