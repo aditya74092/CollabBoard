@@ -19,8 +19,11 @@ const Whiteboard = ({ onLogout }) => {
     const [erase, setErase] = useState(false);
     const [loading, setLoading] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
+    const [eraserWidth, setEraserWidth] = useState(10);
     const previousColor = useRef(color);
     const previousLineWidth = useRef(lineWidth);
+
+    
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -47,7 +50,7 @@ const Whiteboard = ({ onLogout }) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         context.strokeStyle = erase ? '#FFFFFF' : color;
-        context.lineWidth = lineWidth;
+        context.lineWidth = erase ? eraserWidth : lineWidth; // Use eraser width if erase mode is active
         context.beginPath();
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
@@ -56,7 +59,7 @@ const Whiteboard = ({ onLogout }) => {
 
         if (!emit) return;
 
-        socket.emit('drawing', { x0, y0, x1, y1, color: context.strokeStyle, lineWidth, roomId });
+        socket.emit('drawing', { x0, y0, x1, y1, color: context.strokeStyle, lineWidth: context.lineWidth, roomId });
     };
 
     const handleMouseMove = ({ nativeEvent }) => {
@@ -148,7 +151,7 @@ const Whiteboard = ({ onLogout }) => {
             previousColor.current = color;
             previousLineWidth.current = lineWidth;
             setColor('#FFFFFF');
-            setLineWidth(10); // Set a suitable line width for erasing
+            setLineWidth(eraserWidth); // Use eraser width
         }
         setErase(!erase);
     };
@@ -192,6 +195,13 @@ const Whiteboard = ({ onLogout }) => {
                     />
                     <button className="control-button small" onClick={saveSession}>Save Session</button>
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
+                    <input
+                        type="range"
+                        min="1"
+                        max="30"
+                        value={eraserWidth}
+                        onChange={(e) => setEraserWidth(e.target.value)}
+                    />
                 </div>
             )}
             <canvas
