@@ -31,7 +31,7 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.auth-container h1, .auth-container h3 {
+.auth-container h1, .auth-container h3, .auth-container h4 {
   margin-bottom: 20px;
   color: #333;
   font-family: 'Pacifico', cursive; /* Apply the cursive font to the heading */

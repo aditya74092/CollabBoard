@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 .whiteboard-container {
     display: flex;
     flex-direction: column;
@@ -17,6 +18,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
+.auth-container h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Pacifico', cursive; /* Apply the cursive font to the heading */
+  }
 
 .whiteboard-header h1 {
     margin: 0;
