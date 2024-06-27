@@ -24,8 +24,10 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const register = async () => {
+        setLoading(true);
         try {
             const res = await api.post('/auth/register', { username, password });
             console.log('User registered:', res.data);
@@ -36,10 +38,13 @@ function App() {
         } catch (error) {
             console.error('Error registering user:', error.response ? error.response.data : error.message);
             setMessage('Error registering user.');
+        } finally {
+            setLoading(false);
         }
     };
 
     const login = async () => {
+        setLoading(true);
         try {
             const res = await api.post('/auth/login', { username, password });
             console.log('User logged in:', res.data);
@@ -49,6 +54,8 @@ function App() {
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
             setMessage('Error logging in.');
+        } finally {
+            setLoading(false);
         }
     };
 
