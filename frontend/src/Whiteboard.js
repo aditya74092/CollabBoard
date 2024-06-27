@@ -169,8 +169,7 @@ const Whiteboard = ({ onLogout }) => {
                     />
                     <button className="control-button small" onClick={saveSession}>Save Session</button>
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
-                    <button className="close-button" onClick={() => setShowSettings(false)}>Close Settings</button>
-                </div>
+                    </div>
             )}
             <canvas
                 ref={canvasRef}
