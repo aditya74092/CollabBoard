@@ -97,3 +97,7 @@
     border-radius: 8px;
     background-color: white;
 }
+
+.whiteboard.eraser {
+    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABK0lEQVQ4jaWTsY2DMAxFd1BAKnFYAVRgZBN/A8kgnZDp0EM5UgrBBG2TCeJvQmgmABRYoLLguuCWf7Fg09wRJ6EZ5P9stPTfADQQIQYeImK8UqKKhSwhHeGzS7ue+pm/mUjk5AHKqD+43AxuUC6yQszO7gRUDIlIcD0DNEN/8WEETrCZGn7Ds8gZC9DG5TxCiBP57w+OKWmcgpCvNUjrAnemVzKv1JZGbEVmhncAtGRMJYjshRB1xuHRFiq8TuOY9f1X2WhSrs3yxNDmMOsKMqizGFTbVwlhPTnSrsfr5BumgBRrLcvpBG5OD8FRtH2EgEnbfP1gVOAq7UmLi6MuMdhCCPBLk82JFOAZ2R8AAAAAElFTkSuQmCC') 5 5, auto; /* Custom eraser cursor */
+}
