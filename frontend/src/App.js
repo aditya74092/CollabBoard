@@ -64,7 +64,7 @@ function App() {
             <ToastContainer containerId="mainToastContainer" />
             {!isLoggedIn ? (
                 <div className="auth-container">
-                    <h1>Welcome to CollabBoard</h1>
+                    <h2>Welcome to Collab-Board</h1>
                     {message && <p className="message">{message}</p>}
                     {isRegistering ? (
                         <div className="auth-form">
@@ -76,7 +76,7 @@ function App() {
                         </div>
                     ) : (
                         <div className="auth-form">
-                            <h2>Login</h2>
+                            <h3>Login</h3>
                             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <button onClick={login}>Login</button>
