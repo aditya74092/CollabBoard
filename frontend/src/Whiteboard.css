@@ -57,6 +57,8 @@
 }
 
 .control-button.small {
+    top: 1px;
+    bottom: 1px;
     font-size: 14px;
     padding: 5px 10px;
 }

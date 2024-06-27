@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Whiteboard from './Whiteboard';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
 
 const api = axios.create({
@@ -22,8 +24,10 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const register = async () => {
+        setLoading(true);
         try {
             const res = await api.post('/auth/register', { username, password });
             console.log('User registered:', res.data);
@@ -31,22 +35,31 @@ function App() {
             setIsRegistering(false);
             setUsername('');
             setPassword('');
+            toast.success('User registered successfully!');
         } catch (error) {
             console.error('Error registering user:', error.response ? error.response.data : error.message);
             setMessage('Error registering user.');
+            toast.error('Error registering user.');
+        } finally {
+            setLoading(false);
         }
     };
 
     const login = async () => {
+        setLoading(true);
         try {
             const res = await api.post('/auth/login', { username, password });
             console.log('User logged in:', res.data);
             localStorage.setItem('token', res.data.token); // Store the token in local storage
             setAuthToken(res.data.token); // Set the token in headers
             setIsLoggedIn(true);
+            toast.success('Logged in successfully!');
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
             setMessage('Error logging in.');
+            toast.error('Error logging in.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -55,10 +68,13 @@ function App() {
         setAuthToken(null);
         setIsLoggedIn(false);
         setMessage('');
+        toast.info('Logged out successfully.');
     };
 
     return (
         <div className="app-container">
+            <ToastContainer />
+            {loading && <div className="loading">Loading...</div>}
             {!isLoggedIn ? (
                 <div className="auth-container">
                     <h1>Welcome to CollabBoard</h1>
@@ -68,7 +84,7 @@ function App() {
                             <h2>Register</h2>
                             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <button onClick={register}>Register</button>
+                            <button onClick={register} disabled={loading}>Register</button>
                             <button onClick={() => { setIsRegistering(false); setMessage(''); }}>Back to Login</button>
                         </div>
                     ) : (
@@ -76,7 +92,7 @@ function App() {
                             <h2>Login</h2>
                             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <button onClick={login}>Login</button>
+                            <button onClick={login} disabled={loading}>Login</button>
                             <button onClick={() => { setIsRegistering(true); setMessage(''); }}>Register</button>
                         </div>
                     )}

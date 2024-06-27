@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import './Whiteboard.css'; // Import the new CSS file
-import { SketchPicker } from 'react-color';
+import { ToastContainer, toast } from 'react-toastify';
 import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
+import { SketchPicker } from 'react-color';
+import 'react-toastify/dist/ReactToastify.css';
+import './Whiteboard.css'; // Import the new CSS file
 
 const Whiteboard = ({ onLogout }) => {
     const canvasRef = useRef(null);
@@ -14,6 +16,7 @@ const Whiteboard = ({ onLogout }) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -80,21 +83,25 @@ const Whiteboard = ({ onLogout }) => {
         const userId = localStorage.getItem('userId'); // Add this line back
         const token = localStorage.getItem('token');
         const data = canvasRef.current.toDataURL();
+        setLoading(true);
         try {
             await axios.post('https://collabboard-backend.onrender.com/sessions/save', { data, roomId }, {
                 headers: {
                     'x-auth-token': token
                 }
             });
-            alert('Session saved successfully');
+            toast.success('Session saved successfully');
         } catch (error) {
             console.error('Error saving session:', error);
-            alert('Error saving session');
+            toast.error('Error saving session');
+        } finally {
+            setLoading(false);
         }
     };
 
     const loadSession = async () => {
         const token = localStorage.getItem('token');
+        setLoading(true);
         try {
             const response = await axios.get(`https://collabboard-backend.onrender.com/sessions/load/${roomId}`, {
                 headers: {
@@ -109,9 +116,12 @@ const Whiteboard = ({ onLogout }) => {
                 const context = canvas.getContext('2d');
                 context.drawImage(img, 0, 0);
             };
+            toast.success('Session loaded successfully');
         } catch (error) {
             console.error('Error loading session:', error);
-            alert('Error loading session');
+            toast.error('Error loading session');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -126,6 +136,8 @@ const Whiteboard = ({ onLogout }) => {
 
     return (
         <div className="whiteboard-container">
+            <ToastContainer />
+            {loading && <div className="loading">Loading...</div>}
             <header className="whiteboard-header">
                 <h1></h1>
                 <p>Collaborate in real-time with multiple users.</p>
@@ -161,7 +173,7 @@ const Whiteboard = ({ onLogout }) => {
                     <button className="control-button small" onClick={saveSession}>Save Session</button>
                     <li></li>
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
-                    <button className="close-button" onClick={() => setShowSettings(false)}>Close Settings</button>
+                    <button className="close-button" onClick={() => setShowSettings(false)}>Close</button>
                 </div>
             )}
             <canvas
