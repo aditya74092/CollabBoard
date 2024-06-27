@@ -4,7 +4,10 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-image: url('https://images.unsplash.com/photo-1521747116042-5a810fda9664'); /* Example background image URL */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .auth-container {
@@ -20,7 +23,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8); /* Make it slightly transparent */
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -46,6 +49,7 @@
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .auth-form button:hover {

@@ -12,6 +12,7 @@ const Whiteboard = () => {
     const [roomId, setRoomId] = useState('');
     const [isDrawing, setIsDrawing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -125,19 +126,11 @@ const Whiteboard = () => {
     return (
         <div className="whiteboard-container">
             <header className="whiteboard-header">
-                <h1>CollabBoard</h1>
+                <h1>Collab-Board</h1>
             </header>
             <div className="controls">
-                <input
-                    type="text"
-                    placeholder="Enter Room ID"
-                    value={roomId}
-                    onChange={handleRoomIdChange}
-                    className="room-input"
-                />
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}>Color Picker</button>
-                <button className="control-button" onClick={saveSession}>Save Session</button>
-                <button className="control-button" onClick={loadSession}>Load Session</button>
+                <button className="control-button" onClick={() => setShowSettings(!showSettings)}>Settings</button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
@@ -152,10 +145,23 @@ const Whiteboard = () => {
                     <button onClick={() => setShowColorPicker(false)}>Close</button>
                 </div>
             )}
+            {showSettings && (
+                <div className="settings">
+                    <input
+                        type="text"
+                        placeholder="Enter Room ID"
+                        value={roomId}
+                        onChange={handleRoomIdChange}
+                        className="room-input"
+                    />
+                    <button className="control-button" onClick={saveSession}>Save Session</button>
+                    <button className="control-button" onClick={loadSession}>Load Session</button>
+                </div>
+            )}
             <canvas
                 ref={canvasRef}
-                width={800}
-                height={600}
+                width={1200}
+                height={800}
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
                 onMouseMove={handleMouseMove}

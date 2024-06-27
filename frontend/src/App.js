@@ -19,11 +19,14 @@ const setAuthToken = token => {
 function App() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [registerUsername, setRegisterUsername] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
 
     const register = async () => {
         try {
-            const res = await api.post('/auth/register', { username, password });
+            const res = await api.post('/auth/register', { username: registerUsername, password: registerPassword });
             console.log('User registered:', res.data);
             localStorage.setItem('token', res.data.token); // Store the token in local storage
             setAuthToken(res.data.token); // Set the token in headers
@@ -48,18 +51,43 @@ function App() {
         <div className="app-container">
             {!isLoggedIn ? (
                 <div className="auth-container">
-                    <div className="auth-form">
-                        <h2>Register</h2>
-                        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <button onClick={register}>Register</button>
-                    </div>
-                    <div className="auth-form">
-                        <h2>Login</h2>
-                        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <button onClick={login}>Login</button>
-                    </div>
+                    {showRegister ? (
+                        <div className="auth-form">
+                            <h2>Register</h2>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                value={registerUsername}
+                                onChange={(e) => setRegisterUsername(e.target.value)}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={registerPassword}
+                                onChange={(e) => setRegisterPassword(e.target.value)}
+                            />
+                            <button onClick={register}>Register</button>
+                            <button onClick={() => setShowRegister(false)}>Cancel</button>
+                        </div>
+                    ) : (
+                        <div className="auth-form">
+                            <h2>Login</h2>
+                            <input
+                                type="text"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button onClick={login}>Login</button>
+                            <button onClick={() => setShowRegister(true)}>Register</button>
+                        </div>
+                    )}
                 </div>
             ) : (
                 <Whiteboard />
