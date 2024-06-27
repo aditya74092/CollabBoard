@@ -8,6 +8,11 @@ body {
   background-image: url('https://source.unsplash.com/featured/?nature'); /* Replace with your desired background image URL */
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .app-container {
@@ -15,7 +20,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
   padding: 20px;
   border-radius: 10px;
