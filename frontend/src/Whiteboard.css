@@ -9,6 +9,7 @@
 }
 
 .whiteboard-header {
+    margin-top: 670px;
     width: 100%;
     display: flex;
     justify-content: space-between;
