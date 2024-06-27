@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut, FiEraser } from 'react-icons/fi';
 import { SketchPicker } from 'react-color';
 import './Whiteboard.css'; // Import the new CSS file
 
@@ -18,6 +18,8 @@ const Whiteboard = ({ onLogout }) => {
     const [erase, setErase] = useState(false);
     const [loading, setLoading] = useState(false);
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
+    const previousColor = useRef(color);
+    const previousLineWidth = useRef(lineWidth);
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -39,16 +41,11 @@ const Whiteboard = ({ onLogout }) => {
         setIsDrawing(true);
         setLastPosition({ x: offsetX, y: offsetY });
     };
-    const eraseDrawing = ({ nativeEvent }) => {
-        const { offsetX, offsetY } = nativeEvent;
-        setIsDrawing(true);
-        setLastPosition({ x: offsetX, y: offsetY });
-    };
 
     const draw = (x0, y0, x1, y1, emit = true) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        context.strokeStyle = color;
+        context.strokeStyle = erase ? '#FFFFFF' : color;
         context.lineWidth = lineWidth;
         context.beginPath();
         context.moveTo(x0, y0);
@@ -58,7 +55,7 @@ const Whiteboard = ({ onLogout }) => {
 
         if (!emit) return;
 
-        socket.emit('drawing', { x0, y0, x1, y1, color, lineWidth, roomId });
+        socket.emit('drawing', { x0, y0, x1, y1, color: context.strokeStyle, lineWidth, roomId });
     };
 
     const handleMouseMove = ({ nativeEvent }) => {
@@ -72,11 +69,9 @@ const Whiteboard = ({ onLogout }) => {
         setIsDrawing(false);
     };
 
-    const handleColorChange = (color,erase) => {
-        if(erase)setColor("#FFF");
-        else
+    const handleColorChange = (color) => {
+        setErase(false);
         setColor(color.hex);
-
     };
 
     const handleLineWidthChange = (event) => {
@@ -106,7 +101,6 @@ const Whiteboard = ({ onLogout }) => {
             setLoading(false);
         }
     };
-    
 
     const loadSession = async () => {
         const token = localStorage.getItem('token');
@@ -143,12 +137,27 @@ const Whiteboard = ({ onLogout }) => {
         }
     }, [socket]);
 
+    const toggleEraser = () => {
+        if (erase) {
+            // Restore previous settings
+            setColor(previousColor.current);
+            setLineWidth(previousLineWidth.current);
+        } else {
+            // Save current settings and activate eraser
+            previousColor.current = color;
+            previousLineWidth.current = lineWidth;
+            setColor('#FFFFFF');
+            setLineWidth(10); // Set a suitable line width for erasing
+        }
+        setErase(!erase);
+    };
+
     return (
         <div className="whiteboard-container">
             {loading && <div className="loading">Loading...</div>}
             <header className="whiteboard-header">
-            <div className="auth-container">
-                <h1>Collab-Board</h1>
+                <div className="auth-container">
+                    <h1>Collab-Board</h1>
                 </div>
                 <p>Collaborate in real-time with multiple users.</p>
                 <button className="logout-button" onClick={onLogout}><FiLogOut /></button>
@@ -156,6 +165,7 @@ const Whiteboard = ({ onLogout }) => {
             <div className="controls">
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
+                <button className="control-button" onClick={toggleEraser}><FiEraser /></button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
@@ -181,32 +191,15 @@ const Whiteboard = ({ onLogout }) => {
                     />
                     <button className="control-button small" onClick={saveSession}>Save Session</button>
                     <button className="control-button small" onClick={loadSession}>Load Session</button>
-                    </div>
-            )}
-            {erase && (
-                <div className="eraser">
-                    
-                     <button className="control-button small" onClick={()=>handleColorChange(null,true)}>Erase</button>
-                    </div>
+                </div>
             )}
             <canvas
-
-            
-
                 ref={canvasRef}
                 width={1200}
                 height={800}
-
-                //check if it is eraser then 
-                change color
-
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
                 onMouseMove={handleMouseMove}
-                
-
-                
-
                 className="whiteboard"
             />
         </div>
