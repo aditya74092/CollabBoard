@@ -126,7 +126,7 @@ const Whiteboard = () => {
     return (
         <div className="whiteboard-container">
             <header className="whiteboard-header">
-                <h1>Collab-Board</h1>
+               
             </header>
             <div className="controls">
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}>Color Picker</button>

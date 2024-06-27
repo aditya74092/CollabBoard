@@ -1,54 +1,59 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-image: url('https://your-image-url'); /* Replace with your desired background image URL */
+  background-size: cover;
+  background-position: center;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url('https://images.unsplash.com/photo-1521747116042-5a810fda9664'); /* Example background image URL */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.auth-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+.auth-container h1 {
+  margin-bottom: 20px;
+  font-size: 48px;
+  color: #333;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.8); /* Make it slightly transparent */
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.auth-form h2 {
   margin-bottom: 20px;
 }
 
+.auth-form h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+}
+
 .auth-form input {
-  margin-bottom: 15px;
   padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 250px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .auth-form button {
-  padding: 10px 25px;
+  padding: 10px 20px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -56,45 +61,7 @@
   background-color: #0056b3;
 }
 
-.control-button {
-  margin-right: 10px;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.control-button:hover {
-  background-color: #ddd;
-}
-
-.whiteboard-header {
+.message {
+  color: green;
   margin-bottom: 20px;
-}
-
-.controls {
-  margin-bottom: 10px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.room-input {
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.color-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.whiteboard {
-  border: 1px solid #000;
 }

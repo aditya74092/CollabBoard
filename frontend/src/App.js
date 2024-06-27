@@ -19,19 +19,21 @@ const setAuthToken = token => {
 function App() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [registerUsername, setRegisterUsername] = useState('');
-    const [registerPassword, setRegisterPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showRegister, setShowRegister] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [message, setMessage] = useState('');
 
     const register = async () => {
         try {
-            const res = await api.post('/auth/register', { username: registerUsername, password: registerPassword });
+            const res = await api.post('/auth/register', { username, password });
             console.log('User registered:', res.data);
-            localStorage.setItem('token', res.data.token); // Store the token in local storage
-            setAuthToken(res.data.token); // Set the token in headers
+            setMessage('User registered successfully!');
+            setIsRegistering(false);
+            setUsername('');
+            setPassword('');
         } catch (error) {
             console.error('Error registering user:', error.response ? error.response.data : error.message);
+            setMessage('Error registering user.');
         }
     };
 
@@ -44,6 +46,7 @@ function App() {
             setIsLoggedIn(true);
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
+            setMessage('Error logging in.');
         }
     };
 
@@ -51,41 +54,23 @@ function App() {
         <div className="app-container">
             {!isLoggedIn ? (
                 <div className="auth-container">
-                    {showRegister ? (
+                    <h1>Welcome to CollabBoard</h1>
+                    {message && <p className="message">{message}</p>}
+                    {isRegistering ? (
                         <div className="auth-form">
                             <h2>Register</h2>
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={registerUsername}
-                                onChange={(e) => setRegisterUsername(e.target.value)}
-                            />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={registerPassword}
-                                onChange={(e) => setRegisterPassword(e.target.value)}
-                            />
+                            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <button onClick={register}>Register</button>
-                            <button onClick={() => setShowRegister(false)}>Cancel</button>
+                            <button onClick={() => { setIsRegistering(false); setMessage(''); }}>Back to Login</button>
                         </div>
                     ) : (
                         <div className="auth-form">
                             <h2>Login</h2>
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <button onClick={login}>Login</button>
-                            <button onClick={() => setShowRegister(true)}>Register</button>
+                            <button onClick={() => { setIsRegistering(true); setMessage(''); }}>Register</button>
                         </div>
                     )}
                 </div>
