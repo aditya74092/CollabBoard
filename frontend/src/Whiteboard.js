@@ -88,7 +88,7 @@ const Whiteboard = () => {
             alert('Error saving session');
         }
     };
-
+//
     const loadSession = async () => {
         const token = localStorage.getItem('token');
         try {
