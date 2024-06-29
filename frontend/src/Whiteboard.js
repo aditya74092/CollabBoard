@@ -43,11 +43,11 @@ const Whiteboard = ({ onLogout }) => {
         setLastPosition({ x: offsetX, y: offsetY });
     };
 
-    const draw = (x0, y0, x1, y1, emit = true) => {
+    const draw = (x0, y0, x1, y1, emit = true, drawColor = color, drawLineWidth = lineWidth) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        context.strokeStyle = erase ? '#FFFFFF' : color;
-        context.lineWidth = lineWidth;
+        context.strokeStyle = erase ? '#FFFFFF' : drawColor;
+        context.lineWidth = drawLineWidth;
         context.beginPath();
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
@@ -56,7 +56,7 @@ const Whiteboard = ({ onLogout }) => {
 
         if (!emit) return;
 
-        socket.emit('drawing', { x0, y0, x1, y1, color: context.strokeStyle, lineWidth, roomId });
+        socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
     };
 
     const handleMouseMove = ({ nativeEvent }) => {
@@ -84,7 +84,7 @@ const Whiteboard = ({ onLogout }) => {
     };
 
     const saveSession = async () => {
-        const userId = localStorage.getItem('userId'); // Add this line back
+        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         const data = canvasRef.current.toDataURL();
         setLoading(true);
@@ -132,7 +132,7 @@ const Whiteboard = ({ onLogout }) => {
     useEffect(() => {
         if (socket) {
             socket.on('drawing', ({ x0, y0, x1, y1, color, lineWidth }) => {
-                draw(x0, y0, x1, y1, false);
+                draw(x0, y0, x1, y1, false, color, lineWidth);
                 console.log('Drawing received', { x0, y0, x1, y1, color, lineWidth });
             });
         }
