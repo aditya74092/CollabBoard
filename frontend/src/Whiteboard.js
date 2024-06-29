@@ -21,6 +21,9 @@ const Whiteboard = ({ onLogout }) => {
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
     const previousColor = useRef(color);
     const previousLineWidth = useRef(lineWidth);
+    const [shapeType, setShapeType] = useState('freehand'); // 'freehand', 'rectangle', 'circle'
+    const [shapeSize, setShapeSize] = useState(50); // Example size value
+
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -41,6 +44,20 @@ const Whiteboard = ({ onLogout }) => {
         const { offsetX, offsetY } = nativeEvent;
         setIsDrawing(true);
         setLastPosition({ x: offsetX, y: offsetY });
+        
+        if (shapeType !== 'freehand') {
+            switch (shapeType) {
+                case 'rectangle':
+                    drawRectangle(offsetX, offsetY, shapeSize);
+                    break;
+                case 'circle':
+                    drawCircle(offsetX, offsetY, shapeSize);
+                    break;
+                default:
+                    break;
+            }
+            setIsDrawing(false); // Stop drawing after placing the shape
+        }
     };
 
     const draw = (x0, y0, x1, y1, emit = true, drawColor = color, drawLineWidth = lineWidth) => {
@@ -60,7 +77,7 @@ const Whiteboard = ({ onLogout }) => {
     };
 
     const handleMouseMove = ({ nativeEvent }) => {
-        if (!isDrawing) return;
+        if (!isDrawing || shapeType !== 'freehand') return;
         const { offsetX, offsetY } = nativeEvent;
         draw(lastPosition.x, lastPosition.y, offsetX, offsetY);
         setLastPosition({ x: offsetX, y: offsetY });
@@ -152,6 +169,22 @@ const Whiteboard = ({ onLogout }) => {
         }
         setErase(!erase);
     };
+    const drawRectangle = (x, y, size) => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        context.fillStyle = color;
+        context.fillRect(x, y, size, size);
+    };
+    
+    const drawCircle = (x, y, size) => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(x, y, size / 2, 0, 2 * Math.PI);
+        context.fill();
+    };
+    
 
     return (
         <div className="whiteboard-container">
@@ -168,6 +201,21 @@ const Whiteboard = ({ onLogout }) => {
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
                 <button className="control-button" onClick={toggleEraser}><FaEraser /></button>
             </div>
+            <div className="shape-controls">
+                <button onClick={() => setShapeType('freehand')}>Freehand</button>
+                <button onClick={() => setShapeType('rectangle')}>Rectangle</button>
+                <button onClick={() => setShapeType('circle')}>Circle</button>
+                <input
+                    type="range"
+                    min="10"
+                    max="200"
+                    value={shapeSize}
+                    onChange={(e) => setShapeSize(e.target.value)}
+                />
+            </div>
+
+
+
             {showColorPicker && (
                 <div className="color-picker">
                     <SketchPicker color={color} onChangeComplete={handleColorChange} />
