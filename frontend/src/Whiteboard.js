@@ -106,9 +106,9 @@ const Whiteboard = ({ onLogout }) => {
         context.stroke();
         context.closePath();
 
-        if (!emit) return;
-
-        socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
+        if (emit) {
+            socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
+        }
     };
 
     const redraw = () => {
