@@ -218,9 +218,9 @@ const Whiteboard = ({ onLogout }) => {
             </div>
             {showShapePicker && (
                 <div className="shape-picker">
-                    <button onClick={() => { setShapeType('freehand'); setShowShapePicker(false); }}><FiPenTool /></button>
-                    <button onClick={() => { setShapeType('rectangle'); setShowShapePicker(false); }}><FiSquare /></button>
-                    <button onClick={() => { setShapeType('circle'); setShowShapePicker(false); }}><FiCircle /></button>
+                    <button className="shape-button" onClick={() => { setShapeType('freehand'); setShowShapePicker(false); }}><FiPenTool /></button>
+                    <button className="shape-button" onClick={() => { setShapeType('rectangle'); setShowShapePicker(false); }}><FiSquare /></button>
+                    <button className="shape-button" onClick={() => { setShapeType('circle'); setShowShapePicker(false); }}><FiCircle /></button>
                 </div>
             )}
             {showColorPicker && (
