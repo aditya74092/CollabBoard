@@ -53,7 +53,7 @@ const Whiteboard = ({ onLogout }) => {
         setCurrentPosition({ x: offsetX, y: offsetY });
 
         if (shapeType === 'freehand') {
-            draw(startPosition.x, startPosition.y, offsetX, offsetY);
+            draw(startPosition.x, startPosition.y, offsetX, offsetY, true, color, lineWidth);
             setStartPosition({ x: offsetX, y: offsetY });
         } else {
             redraw();
