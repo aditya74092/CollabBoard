@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSettings, FiEdit3, FiLogOut, FiSquare, FiCircle, FiPenTool } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
 import { FaEraser } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
 import './Whiteboard.css'; // Import the new CSS file
@@ -18,12 +18,9 @@ const Whiteboard = ({ onLogout }) => {
     const [showSettings, setShowSettings] = useState(false);
     const [erase, setErase] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [showShapePicker, setShowShapePicker] = useState(false);
-    const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
-    const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
+    const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
     const previousColor = useRef(color);
     const previousLineWidth = useRef(lineWidth);
-    const [shapeType, setShapeType] = useState('freehand'); // 'freehand', 'rectangle', 'circle'
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -43,56 +40,7 @@ const Whiteboard = ({ onLogout }) => {
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
         setIsDrawing(true);
-        setStartPosition({ x: offsetX, y: offsetY });
-        setCurrentPosition({ x: offsetX, y: offsetY });
-    };
-
-    const handleMouseMove = ({ nativeEvent }) => {
-        if (!isDrawing) return;
-        const { offsetX, offsetY } = nativeEvent;
-        setCurrentPosition({ x: offsetX, y: offsetY });
-
-        if (shapeType === 'freehand') {
-            draw(startPosition.x, startPosition.y, offsetX, offsetY, true, color, lineWidth);
-            setStartPosition({ x: offsetX, y: offsetY });
-        } else {
-            redraw();
-        }
-    };
-
-    const stopDrawing = () => {
-        if (!isDrawing) return;
-        setIsDrawing(false);
-
-        if (shapeType !== 'freehand') {
-            drawShape(startPosition, currentPosition, shapeType, true);
-        }
-    };
-
-    const drawShape = (start, end, type, emit = false) => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-
-        context.strokeStyle = erase ? '#FFFFFF' : color;
-        context.lineWidth = lineWidth;
-
-        // Clear canvas and redraw existing content
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.putImageData(imageData, 0, 0);
-
-        if (type === 'rectangle') {
-            context.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
-        } else if (type === 'circle') {
-            const radius = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
-            context.beginPath();
-            context.arc(start.x, start.y, radius, 0, 2 * Math.PI);
-            context.stroke();
-        }
-
-        if (emit) {
-            socket.emit('drawing', { start, end, type, color, lineWidth, roomId });
-        }
+        setLastPosition({ x: offsetX, y: offsetY });
     };
 
     const draw = (x0, y0, x1, y1, emit = true, drawColor = color, drawLineWidth = lineWidth) => {
@@ -106,16 +54,20 @@ const Whiteboard = ({ onLogout }) => {
         context.stroke();
         context.closePath();
 
-        if (emit) {
-            socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
-        }
+        if (!emit) return;
+
+        socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
     };
 
-    const redraw = () => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        drawShape(startPosition, currentPosition, shapeType);
+    const handleMouseMove = ({ nativeEvent }) => {
+        if (!isDrawing) return;
+        const { offsetX, offsetY } = nativeEvent;
+        draw(lastPosition.x, lastPosition.y, offsetX, offsetY);
+        setLastPosition({ x: offsetX, y: offsetY });
+    };
+
+    const stopDrawing = () => {
+        setIsDrawing(false);
     };
 
     const handleColorChange = (color) => {
@@ -179,13 +131,9 @@ const Whiteboard = ({ onLogout }) => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('drawing', ({ x0, y0, x1, y1, color, lineWidth, start, end, type }) => {
-                if (type === 'freehand') {
-                    draw(x0, y0, x1, y1, false, color, lineWidth);
-                } else {
-                    drawShape(start, end, type, false);
-                }
-                console.log('Drawing received', { x0, y0, x1, y1, color, lineWidth, start, end, type });
+            socket.on('drawing', ({ x0, y0, x1, y1, color, lineWidth }) => {
+                draw(x0, y0, x1, y1, false, color, lineWidth);
+                console.log('Drawing received', { x0, y0, x1, y1, color, lineWidth });
             });
         }
     }, [socket]);
@@ -219,19 +167,7 @@ const Whiteboard = ({ onLogout }) => {
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
                 <button className="control-button" onClick={toggleEraser}><FaEraser /></button>
-                <button className="control-button" onClick={() => setShowShapePicker(!showShapePicker)}>
-                    {shapeType === 'freehand' && <FiPenTool />}
-                    {shapeType === 'rectangle' && <FiSquare />}
-                    {shapeType === 'circle' && <FiCircle />}
-                </button>
             </div>
-            {showShapePicker && (
-                <div className="shape-picker">
-                    <button className="shape-button" onClick={() => { setShapeType('freehand'); setShowShapePicker(false); }}><FiPenTool /></button>
-                    <button className="shape-button" onClick={() => { setShapeType('rectangle'); setShowShapePicker(false); }}><FiSquare /></button>
-                    <button className="shape-button" onClick={() => { setShapeType('circle'); setShowShapePicker(false); }}><FiCircle /></button>
-                </div>
-            )}
             {showColorPicker && (
                 <div className="color-picker">
                     <SketchPicker color={color} onChangeComplete={handleColorChange} />
