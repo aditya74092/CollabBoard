@@ -75,15 +75,15 @@ const Whiteboard = ({ onLogout }) => {
     const handleMouseMove = ({ nativeEvent }) => {
         if (!isDrawing) return;
         const { offsetX, offsetY } = nativeEvent;
+        setCurrentPosition({ x: offsetX, y: offsetY });
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        draw(startPosition.x, startPosition.y, offsetX, offsetY, shapeType, false); // Draw the shape without emitting
+
         if (shapeType === 'freehand') {
             draw(lastPosition.x, lastPosition.y, offsetX, offsetY, 'freehand');
             setLastPosition({ x: offsetX, y: offsetY });
-        } else {
-            setCurrentPosition({ x: offsetX, y: offsetY });
-            const canvas = canvasRef.current;
-            const context = canvas.getContext('2d');
-            context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-            draw(startPosition.x, startPosition.y, offsetX, offsetY, shapeType, false); // Draw the shape without emitting
         }
     };
 
