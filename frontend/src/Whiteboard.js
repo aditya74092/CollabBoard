@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut, FiSquare, FiCircle, FiPenTool } from 'react-icons/fi';
 import { FaEraser } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
 import './Whiteboard.css'; // Import the new CSS file
@@ -18,6 +18,7 @@ const Whiteboard = ({ onLogout }) => {
     const [showSettings, setShowSettings] = useState(false);
     const [erase, setErase] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showShapePicker, setShowShapePicker] = useState(false);
     const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
     const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
     const previousColor = useRef(color);
@@ -209,13 +210,19 @@ const Whiteboard = ({ onLogout }) => {
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
                 <button className="control-button" onClick={toggleEraser}><FaEraser /></button>
+                <button className="control-button" onClick={() => setShowShapePicker(!showShapePicker)}>
+                    {shapeType === 'freehand' && <FiPenTool />}
+                    {shapeType === 'rectangle' && <FiSquare />}
+                    {shapeType === 'circle' && <FiCircle />}
+                </button>
             </div>
-            <div className="shape-controls">
-                <button onClick={() => setShapeType('freehand')}>Freehand</button>
-                <button onClick={() => setShapeType('rectangle')}>Rectangle</button>
-                <button onClick={() => setShapeType('circle')}>Circle</button>
-            </div>
-
+            {showShapePicker && (
+                <div className="shape-picker">
+                    <button onClick={() => { setShapeType('freehand'); setShowShapePicker(false); }}><FiPenTool /></button>
+                    <button onClick={() => { setShapeType('rectangle'); setShowShapePicker(false); }}><FiSquare /></button>
+                    <button onClick={() => { setShapeType('circle'); setShowShapePicker(false); }}><FiCircle /></button>
+                </div>
+            )}
             {showColorPicker && (
                 <div className="color-picker">
                     <SketchPicker color={color} onChangeComplete={handleColorChange} />
