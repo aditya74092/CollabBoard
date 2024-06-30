@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
+import { FiSettings, FiEdit3, FiLogOut, FiSquare, FiCircle, FiPenTool } from 'react-icons/fi';
 import { FaEraser } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
-import './Whiteboard.css'; // Import the new CSS filekk
+import './Whiteboard.css'; // Import the new CSS file
 
 const Whiteboard = ({ onLogout }) => {
     const canvasRef = useRef(null);
@@ -21,6 +21,9 @@ const Whiteboard = ({ onLogout }) => {
     const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
     const previousColor = useRef(color);
     const previousLineWidth = useRef(lineWidth);
+    const [shapeType, setShapeType] = useState('freehand'); // 'freehand', 'rectangle', 'circle'
+    const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+    const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const newSocket = io('https://collabboard-backend.onrender.com'); // Update this to your backend URL
@@ -40,34 +43,58 @@ const Whiteboard = ({ onLogout }) => {
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
         setIsDrawing(true);
+        setStartPosition({ x: offsetX, y: offsetY });
         setLastPosition({ x: offsetX, y: offsetY });
     };
 
-    const draw = (x0, y0, x1, y1, emit = true, drawColor = color, drawLineWidth = lineWidth) => {
+    const draw = (x0, y0, x1, y1, type = 'freehand', emit = true, drawColor = color, drawLineWidth = lineWidth) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         context.strokeStyle = erase ? '#FFFFFF' : drawColor;
         context.lineWidth = drawLineWidth;
         context.beginPath();
-        context.moveTo(x0, y0);
-        context.lineTo(x1, y1);
+
+        if (type === 'freehand') {
+            context.moveTo(x0, y0);
+            context.lineTo(x1, y1);
+        } else if (type === 'rectangle') {
+            context.rect(x0, y0, x1 - x0, y1 - y0);
+        } else if (type === 'circle') {
+            const radius = Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
+            context.arc(x0, y0, radius, 0, 2 * Math.PI);
+        }
+
         context.stroke();
         context.closePath();
 
         if (!emit) return;
 
-        socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
+        socket.emit('drawing', { x0, y0, x1, y1, type, color: drawColor, lineWidth: drawLineWidth, roomId });
     };
 
     const handleMouseMove = ({ nativeEvent }) => {
         if (!isDrawing) return;
         const { offsetX, offsetY } = nativeEvent;
-        draw(lastPosition.x, lastPosition.y, offsetX, offsetY);
-        setLastPosition({ x: offsetX, y: offsetY });
+        if (shapeType === 'freehand') {
+            draw(lastPosition.x, lastPosition.y, offsetX, offsetY, 'freehand');
+            setLastPosition({ x: offsetX, y: offsetY });
+        } else {
+            setCurrentPosition({ x: offsetX, y: offsetY });
+            const canvas = canvasRef.current;
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            draw(startPosition.x, startPosition.y, offsetX, offsetY, shapeType, false); // Draw the shape without emitting
+        }
     };
 
     const stopDrawing = () => {
+        if (!isDrawing) return;
         setIsDrawing(false);
+        if (shapeType === 'freehand') {
+            draw(lastPosition.x, lastPosition.y, currentPosition.x, currentPosition.y, 'freehand', true);
+        } else {
+            draw(startPosition.x, startPosition.y, currentPosition.x, currentPosition.y, shapeType, true); // Draw the shape and emit
+        }
     };
 
     const handleColorChange = (color) => {
@@ -131,9 +158,9 @@ const Whiteboard = ({ onLogout }) => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('drawing', ({ x0, y0, x1, y1, color, lineWidth }) => {
-                draw(x0, y0, x1, y1, false, color, lineWidth);
-                console.log('Drawing received', { x0, y0, x1, y1, color, lineWidth });
+            socket.on('drawing', ({ x0, y0, x1, y1, type, color, lineWidth }) => {
+                draw(x0, y0, x1, y1, type, false, color, lineWidth);
+                console.log('Drawing received', { x0, y0, x1, y1, type, color, lineWidth });
             });
         }
     }, [socket]);
@@ -167,6 +194,9 @@ const Whiteboard = ({ onLogout }) => {
                 <button className="control-button" onClick={() => setShowColorPicker(!showColorPicker)}><FiEdit3 /></button>
                 <button className="control-button" onClick={() => setShowSettings(!showSettings)}><FiSettings /></button>
                 <button className="control-button" onClick={toggleEraser}><FaEraser /></button>
+                <button className="control-button" onClick={() => setShapeType('freehand')}><FiPenTool /></button>
+                <button className="control-button" onClick={() => setShapeType('rectangle')}><FiSquare /></button>
+                <button className="control-button" onClick={() => setShapeType('circle')}><FiCircle /></button>
             </div>
             {showColorPicker && (
                 <div className="color-picker">
