@@ -76,8 +76,10 @@ const Whiteboard = ({ onLogout }) => {
         context.strokeStyle = erase ? '#FFFFFF' : color;
         context.lineWidth = lineWidth;
 
+        // Clear canvas and redraw existing content
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(canvasRef.current, 0, 0);
+        context.putImageData(imageData, 0, 0);
 
         if (type === 'rectangle') {
             context.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
