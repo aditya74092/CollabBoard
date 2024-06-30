@@ -73,8 +73,11 @@ const Whiteboard = ({ onLogout }) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
-        context.strokeStyle = color;
+        context.strokeStyle = erase ? '#FFFFFF' : color;
         context.lineWidth = lineWidth;
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(canvasRef.current, 0, 0);
 
         if (type === 'rectangle') {
             context.strokeRect(start.x, start.y, end.x - start.x, end.y - start.y);
@@ -90,11 +93,11 @@ const Whiteboard = ({ onLogout }) => {
         }
     };
 
-    const draw = (x0, y0, x1, y1, emit = true) => {
+    const draw = (x0, y0, x1, y1, emit = true, drawColor = color, drawLineWidth = lineWidth) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        context.strokeStyle = erase ? '#FFFFFF' : color;
-        context.lineWidth = lineWidth;
+        context.strokeStyle = erase ? '#FFFFFF' : drawColor;
+        context.lineWidth = drawLineWidth;
         context.beginPath();
         context.moveTo(x0, y0);
         context.lineTo(x1, y1);
@@ -103,7 +106,7 @@ const Whiteboard = ({ onLogout }) => {
 
         if (!emit) return;
 
-        socket.emit('drawing', { x0, y0, x1, y1, color, lineWidth, roomId });
+        socket.emit('drawing', { x0, y0, x1, y1, color: drawColor, lineWidth: drawLineWidth, roomId });
     };
 
     const redraw = () => {
@@ -174,9 +177,13 @@ const Whiteboard = ({ onLogout }) => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('drawing', ({ start, end, type, color, lineWidth }) => {
-                drawShape(start, end, type, false);
-                console.log('Drawing received', { start, end, type, color, lineWidth });
+            socket.on('drawing', ({ x0, y0, x1, y1, color, lineWidth, start, end, type }) => {
+                if (type === 'freehand') {
+                    draw(x0, y0, x1, y1, false, color, lineWidth);
+                } else {
+                    drawShape(start, end, type, false);
+                }
+                console.log('Drawing received', { x0, y0, x1, y1, color, lineWidth, start, end, type });
             });
         }
     }, [socket]);
