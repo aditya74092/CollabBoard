@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import { FiSettings, FiEdit3, FiLogOut } from 'react-icons/fi';
 import { FaEraser } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
-import './Whiteboard.css'; // Import the new CSS filekk
+import './Whiteboard.css'; // Import the new CSS filekk to deploy
+
 
 const Whiteboard = ({ onLogout }) => {
     const canvasRef = useRef(null);
