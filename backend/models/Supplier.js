@@ -11,12 +11,12 @@ const Supplier = sequelize.define('Supplier', {
         allowNull: false
     },
     number: {
-        type: DataTypes.INTEGER,
+        type:  DataTypes.STRING,
         allowNull: false
     },
     modifiedDate: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type:  DataTypes.STRING,
+        
         allowNull: false
     }
 }, {
