@@ -11,13 +11,13 @@ const Supplier = sequelize.define('Supplier', {
         allowNull: false
     },
     number: {
-        type:  DataTypes.STRING,
+        type: DataTypes.STRING,  // Assuming number is a string to store phone numbers
         allowNull: false
     },
     modifiedDate: {
-        type:  DataTypes.STRING,
-        
-        allowNull: false
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 }, {
     tableName: 'suppliers' // Ensure this is lowercase
