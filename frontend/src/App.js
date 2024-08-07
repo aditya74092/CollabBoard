@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Whiteboard from './Whiteboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
@@ -93,7 +92,10 @@ function App() {
                     )}
                 </div>
             ) : (
-                <Whiteboard onLogout={logout} />
+                <div className="blank-screen">
+                    <h1>Welcome to CollabBoard</h1>
+                    <button className="logout-button" onClick={logout}>Logout</button>
+                </div>
             )}
         </div>
     );
