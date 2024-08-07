@@ -16,11 +16,11 @@ const Supplier = sequelize.define('Supplier', {
     },
     modifiedDate: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        allowNull: false
     }
 }, {
-    tableName: 'suppliers', // Ensure this is lowercase
-    timestamps: false // Disable automatic createdAt and updatedAt fields
+    tableName: 'suppliers' // Ensure this is lowercase
 });
 
 module.exports = Supplier;
