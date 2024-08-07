@@ -5,14 +5,14 @@ const auth = require('../middleware/auth');
 
 // Add a new supplier
 router.post('/add', auth, async (req, res) => {
-    const { name, email, number, modifiedDate } = req.body;
+    const { name, email, number } = req.body;
 
-    if (!name || !email || !number || !modifiedDate) {
-        return res.status(400).json({ error: 'Name, email, number, and modifiedDate are required' });
+    if (!name || !email || !number) {
+        return res.status(400).json({ error: 'Name, email, and number are required' });
     }
 
     try {
-        const newSupplier = await Supplier.create({ name, email, number, modifiedDate });
+        const newSupplier = await Supplier.create({ name, email, number });
         res.json(newSupplier);
     } catch (error) {
         res.status(500).json({ error: error.message });
