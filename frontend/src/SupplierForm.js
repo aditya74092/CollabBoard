@@ -10,6 +10,7 @@ function SupplierForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [number, setNumber] = useState('');
+    const [modifiedDate, setModifiedDate] = useState(new Date().toISOString().slice(0, 16)); // Default to current date and time in input format
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -17,7 +18,7 @@ function SupplierForm() {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await api.post('/suppliers/add', { name, email, number }, {
+            const res = await api.post('/suppliers/add', { name, email, number, modifiedDate }, {
                 headers: {
                     'x-auth-token': token
                 }
@@ -26,6 +27,7 @@ function SupplierForm() {
             setName('');
             setEmail('');
             setNumber('');
+            setModifiedDate(new Date().toISOString().slice(0, 16));
         } catch (error) {
             console.error('Error adding supplier:', error.response ? error.response.data : error.message);
             setMessage('Error adding supplier.');
@@ -56,6 +58,11 @@ function SupplierForm() {
                 placeholder="Number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
+            />
+            <input
+                type="datetime-local"
+                value={modifiedDate}
+                onChange={(e) => setModifiedDate(e.target.value)}
             />
             <button className="add-button" onClick={addSupplier}>Add Supplier</button>
         </div>
