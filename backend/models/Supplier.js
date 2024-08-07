@@ -19,7 +19,8 @@ const Supplier = sequelize.define('Supplier', {
         defaultValue: DataTypes.NOW
     }
 }, {
-    tableName: 'suppliers' // Ensure this is lowercase
+    tableName: 'suppliers', // Ensure this is lowercase
+    timestamps: false // Disable automatic createdAt and updatedAt fields
 });
 
 module.exports = Supplier;
