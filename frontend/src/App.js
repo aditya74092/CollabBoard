@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
+import SupplierForm from './SupplierForm'; // Import the new SupplierForm component
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
@@ -92,9 +93,9 @@ function App() {
                     )}
                 </div>
             ) : (
-                <div className="blank-screen">
-                    <h1>Welcome to CollabBoard</h1>
+                <div className="logged-in-container">
                     <button className="logout-button" onClick={logout}>Logout</button>
+                    <SupplierForm /> {/* Render the SupplierForm component */}
                 </div>
             )}
         </div>

@@ -6,9 +6,11 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 const User = require('./models/User');
 const Session = require('./models/Session');
+const Supplier = require('./models/Supplier');
 const UserRoutes = require('./routes/users');
 const SessionRoutes = require('./routes/sessions');
 const AuthRoutes = require('./routes/auth');
+const SupplierRoutes = require('./routes/suppliers');
 const auth = require('./middleware/auth');
 const jwt = require('jsonwebtoken');
 
@@ -43,6 +45,7 @@ sequelize.authenticate()
 app.use('/users', auth, UserRoutes);        // Protect the users route
 app.use('/sessions', auth, SessionRoutes);  // Protect the sessions route
 app.use('/auth', AuthRoutes);               // Do not protect auth routes (login and register)
+app.use('/suppliers', auth, SupplierRoutes); // Protect the suppliers route
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
