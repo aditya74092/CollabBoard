@@ -24,7 +24,7 @@ router.post('/add', auth, async (req, res) => {
 // Get all suppliers
 router.get('/', auth, async (req, res) => {
     try {
-        const suppliers = await Supplier.findAll({ where: { userId: req.user.id } });  // Fetch suppliers for the logged-in user
+        const suppliers = await Supplier.findAll({ where: { userid: req.user.id } });  // Fetch suppliers for the logged-in user
         res.json(suppliers);
     } catch (error) {
         res.status(500).json({ error: error.message });
