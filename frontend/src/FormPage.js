@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './FormPage.css'; // Create and import CSS file for styling
 
@@ -8,6 +8,7 @@ const api = axios.create({
 
 function FormPage() {
     // Supplier States
+    const [suppliers, setSuppliers] = useState([]);
     const [supplierName, setSupplierName] = useState('');
     const [supplierEmail, setSupplierEmail] = useState('');
     const [supplierNumber, setSupplierNumber] = useState('');
@@ -15,11 +16,38 @@ function FormPage() {
     const [supplierLoading, setSupplierLoading] = useState(false);
 
     // Customer States
+    const [customers, setCustomers] = useState([]);
     const [customerName, setCustomerName] = useState('');
     const [customerEmail, setCustomerEmail] = useState('');
     const [customerNumber, setCustomerNumber] = useState('');
     const [customerMessage, setCustomerMessage] = useState('');
     const [customerLoading, setCustomerLoading] = useState(false);
+
+    // Fetch suppliers and customers when the component mounts
+    useEffect(() => {
+        const fetchSuppliersAndCustomers = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const suppliersRes = await api.get('/suppliers', {
+                    headers: {
+                        'x-auth-token': token
+                    }
+                });
+                setSuppliers(suppliersRes.data);
+
+                const customersRes = await api.get('/customers', {
+                    headers: {
+                        'x-auth-token': token
+                    }
+                });
+                setCustomers(customersRes.data);
+            } catch (error) {
+                console.error('Error fetching data:', error.response ? error.response.data : error.message);
+            }
+        };
+
+        fetchSuppliersAndCustomers();
+    }, []);
 
     // Add Supplier
     const addSupplier = async () => {
@@ -32,6 +60,7 @@ function FormPage() {
                 }
             });
             setSupplierMessage('Supplier added successfully!');
+            setSuppliers([...suppliers, res.data]);  // Add the new supplier to the list
             setSupplierName('');
             setSupplierEmail('');
             setSupplierNumber('');
@@ -54,6 +83,7 @@ function FormPage() {
                 }
             });
             setCustomerMessage('Customer added successfully!');
+            setCustomers([...customers, res.data]);  // Add the new customer to the list
             setCustomerName('');
             setCustomerEmail('');
             setCustomerNumber('');
@@ -91,6 +121,13 @@ function FormPage() {
                     onChange={(e) => setSupplierNumber(e.target.value)}
                 />
                 <button className="add-button" onClick={addSupplier}>Add Supplier</button>
+
+                <h3>Your Suppliers</h3>
+                <ul>
+                    {suppliers.map(supplier => (
+                        <li key={supplier.id}>{supplier.name} - {supplier.email} - {supplier.number}</li>
+                    ))}
+                </ul>
             </div>
 
             {/* Customer Form */}
@@ -117,6 +154,13 @@ function FormPage() {
                     onChange={(e) => setCustomerNumber(e.target.value)}
                 />
                 <button className="add-button" onClick={addCustomer}>Add Customer</button>
+
+                <h3>Your Customers</h3>
+                <ul>
+                    {customers.map(customer => (
+                        <li key={customer.id}>{customer.name} - {customer.email} - {customer.number}</li>
+                    ))}
+                </ul>
             </div>
         </div>
     );

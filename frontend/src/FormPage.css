@@ -11,6 +11,8 @@
 
 .supplier-form-container, .customer-form-container {
     margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
 }
 
 .supplier-form-container h2, .customer-form-container h2 {
@@ -49,4 +51,17 @@ input {
 
 .add-button:hover {
     background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

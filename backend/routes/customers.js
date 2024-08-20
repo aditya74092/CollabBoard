@@ -21,6 +21,7 @@ router.post('/add', auth, async (req, res) => {
 });
 
 // Get all customers
+// Get all customers for the logged-in user
 router.get('/', auth, async (req, res) => {
     try {
         const customers = await Customer.findAll({ where: { userid: req.user.id } });  // Fetch customers for the logged-in user
