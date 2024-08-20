@@ -71,7 +71,7 @@ function App() {
             <ToastContainer containerId="mainToastContainer" />
             {!isLoggedIn ? (
                 <div className="auth-container">
-                    <h3>Welcome to Collab-Board</h3>
+                    <h3>Welcome to Manage-Karo</h3>
                     {message && <p className="message">{message}</p>}
                     {loading && <div className="loading">Loading...</div>}
                     {isRegistering ? (
