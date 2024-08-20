@@ -1,6 +1,6 @@
-# CollabBoard
+# ManageKaro
 
-CollabBoard is a web-based collaborative whiteboard application that allows multiple users to sketch and collaborate in real time. This application is built using modern web technologies and deployed on cloud platforms for scalability and reliability.
+Manage Karo is a web-based collaborative whiteboard application that allows multiple users to sketch and collaborate in real time. This application is built using modern web technologies and deployed on cloud platforms for scalability and reliability.
 
 Features:-
     Real-time Collaboration: Multiple users can create or join a shared whiteboard session using a room ID and collaborate in real time.
@@ -27,7 +27,7 @@ Tech Stack:-
 
 Project Structure:-
 
-/CollabBoard
+/ManageKaro
         ├── /client            # React frontend
         │   ├── /public        # Public assets
         │   ├── /src           # Source files
