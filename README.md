@@ -1,12 +1,6 @@
 # ManageKaro
 
-Manage Karo is a web-based collaborative whiteboard application that allows multiple users to sketch and collaborate in real time. This application is built using modern web technologies and deployed on cloud platforms for scalability and reliability.
 
-Features:-
-    Real-time Collaboration: Multiple users can create or join a shared whiteboard session using a room ID and collaborate in real time.
-    Sketching Tools: Users can draw on the whiteboard using different colors and see changes made by other users instantly.
-    Session Management: Save and load whiteboard sessions for later use.
-    User Authentication: Secure login and registration functionality using JWT.
 
 
 Tech Stack:-
@@ -47,17 +41,6 @@ Project Structure:-
         └── README.md          # Project documentation
 
 
-Usage:
-    Open the deployed application in your browser.
-    Register a new account or log in with existing credentials.
-    Create or join a whiteboard session using a room ID.
-    Start sketching and collaborating in real time with other users.
-
-
-Future Improvements:
-    Adding more drawing tools like shapes and text.
-    Implementing unit tests for frontend and backend components.
-    Enhancing the user interface with additional features and animations.
 
 
 Assumptions:
