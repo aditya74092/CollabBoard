@@ -6,19 +6,20 @@ const auth = require('../middleware/auth');
 // Add a new supplier
 router.post('/add', auth, async (req, res) => {
     const { name, email, number } = req.body;
-    const userId = req.user.id;  // Get the userId from the authenticated user
+    const userid = req.user.id;  // Match the case with the database column
 
     if (!name || !email || !number) {
         return res.status(400).json({ error: 'Name, email, and number are required' });
     }
 
     try {
-        const newSupplier = await Supplier.create({ name, email, number, userId });
+        const newSupplier = await Supplier.create({ name, email, number, userid });
         res.json(newSupplier);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // Get all suppliers
 router.get('/', auth, async (req, res) => {

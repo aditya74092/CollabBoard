@@ -14,13 +14,13 @@ const Supplier = sequelize.define('Supplier', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    userId: {
+    userid: {  // Use lowercase to match the database column name
         type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
     tableName: 'suppliers',
-    timestamps: false // Disable automatic createdAt and updatedAt fields
+    timestamps: false
 });
 
 module.exports = Supplier;

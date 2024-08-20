@@ -14,13 +14,13 @@ const Customer = sequelize.define('Customer', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    userId: {
+    userid: {  // Use lowercase to match the database column name
         type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
     tableName: 'customers',
-    timestamps: false // Disable automatic createdAt and updatedAt fields
+    timestamps: false
 });
 
 module.exports = Customer;
