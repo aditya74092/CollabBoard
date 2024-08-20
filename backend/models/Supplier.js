@@ -11,11 +11,15 @@ const Supplier = sequelize.define('Supplier', {
         allowNull: false
     },
     number: {
-        type: DataTypes.STRING,  // Assuming number is a string to store phone numbers
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    userId: {
+        type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
-    tableName: 'suppliers', // Ensure this is lowercase
+    tableName: 'suppliers',
     timestamps: false // Disable automatic createdAt and updatedAt fields
 });
 
