@@ -1,4 +1,4 @@
-.supplier-form-container {
+.form-page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,22 +9,26 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.supplier-form-container h2 {
+.supplier-form-container, .customer-form-container {
+    margin-bottom: 30px;
+}
+
+.supplier-form-container h2, .customer-form-container h2 {
     margin-bottom: 20px;
 }
 
-.supplier-form-container .message {
+.message {
     margin-bottom: 20px;
     color: green;
     font-size: 1.2rem;
 }
 
-.supplier-form-container .loading {
+.loading {
     margin-bottom: 20px;
     color: #333;
 }
 
-.supplier-form-container input {
+input {
     width: 100%;
     max-width: 300px;
     padding: 10px;
@@ -33,7 +37,7 @@
     border-radius: 5px;
 }
 
-.supplier-form-container .add-button {
+.add-button {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -43,6 +47,6 @@
     font-size: 1em;
 }
 
-.supplier-form-container .add-button:hover {
+.add-button:hover {
     background-color: #0056b3;
 }
