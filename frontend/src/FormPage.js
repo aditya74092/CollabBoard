@@ -158,7 +158,7 @@ function FormPage() {
                 <h3>Your Customers</h3>
                 <ul>
                     {customers.map(customer => (
-                        <li key={customer.id}>{customer.name} - {customer.email} - {customer.number}</li>
+                        <li key={customer.id}>{customer.name} - {customer.email} - {customer.number} - {customer.created_at}</li>
                     ))}
                 </ul>
             </div>

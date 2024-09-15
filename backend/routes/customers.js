@@ -7,13 +7,14 @@ const auth = require('../middleware/auth');
 router.post('/add', auth, async (req, res) => {
     const { name, email, number } = req.body;
     const userid = req.user.id;  // Get the userId from the authenticated user
+    const created_at = new Date(); //fecth currect time ;//
 
     if (!name || !email || !number) {
         return res.status(400).json({ error: 'Name, email, and number are required' });
     }
 
     try {
-        const newCustomer = await Customer.create({ name, email, number, userid });
+        const newCustomer = await Customer.create({ name, email, number, userid, created_at });
         res.json(newCustomer);
     } catch (error) {
         res.status(500).json({ error: error.message });
