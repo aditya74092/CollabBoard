@@ -125,7 +125,7 @@ function FormPage() {
                 <h3>Your Suppliers</h3>
                 <ul>
                     {suppliers.map(supplier => (
-                        <li key={supplier.id}>{supplier.name} - {supplier.email} - {supplier.number}</li>
+                        <li key={supplier.id}>{supplier.name} - {supplier.email} - {supplier.number}-{supplier.created_at}</li>
                     ))}
                 </ul>
             </div>
