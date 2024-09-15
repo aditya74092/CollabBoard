@@ -7,13 +7,14 @@ const auth = require('../middleware/auth');
 router.post('/add', auth, async (req, res) => {
     const { name, email, number } = req.body;
     const userid = req.user.id;  // Match the case with the database column
+    const created_at = new Date(); //fecth currect time ;//
 
     if (!name || !email || !number) {
         return res.status(400).json({ error: 'Name, email, and number are required' });
     }
 
     try {
-        const newSupplier = await Supplier.create({ name, email, number, userid });
+        const newSupplier = await Supplier.create({ name, email, number, userid,created_at });
         res.json(newSupplier);
     } catch (error) {
         res.status(500).json({ error: error.message });

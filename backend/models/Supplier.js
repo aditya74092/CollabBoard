@@ -17,6 +17,10 @@ const Supplier = sequelize.define('Supplier', {
     userid: {  // Use lowercase to match the database column name
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    created_at: {  // Use lowercase to match the database column name
+        type: DataTypes.DATE,
+        allowNull: false
     }
 }, {
     tableName: 'suppliers',
