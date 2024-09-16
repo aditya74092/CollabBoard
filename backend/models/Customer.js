@@ -12,7 +12,12 @@ const Customer = sequelize.define('Customer', {
     },
     number: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: true,  // Ensures that the number is not an empty string
+            is: /^[0-9]+$/, // Ensures that the number contains only digits
+            len: [10, 10]   // Ensures that the number has a length between 10 and 15 characters
+        }
     },
     userid: {  // Use lowercase to match the database column name
         type: DataTypes.INTEGER,
