@@ -8,7 +8,11 @@ const Customer = sequelize.define('Customer', {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: true,  // Ensures that the email is not an empty string
+            isEmail: true    // Ensures that the email is in a valid format
+        }
     },
     number: {
         type: DataTypes.STRING,
