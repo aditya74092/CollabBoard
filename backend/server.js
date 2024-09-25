@@ -13,6 +13,7 @@ const SessionRoutes = require('./routes/sessions');
 const SupplierRoutes = require('./routes/suppliers');
 const CustomerRoutes = require('./routes/customers'); // Import the customer routes
 const AuthRoutes = require('./routes/auth');
+const ShopRoutes = require('./routes/shops');
 const auth = require('./middleware/auth');
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/users', auth, UserRoutes);        // Protect the users route
 app.use('/sessions', auth, SessionRoutes);  // Protect the sessions route
 app.use('/suppliers', auth, SupplierRoutes); // Protect the suppliers route
 app.use('/customers', auth, CustomerRoutes); // Protect the customers route
+app.use('/shops', auth, ShopRoutes);
 app.use('/auth', AuthRoutes);               // Do not protect auth routes (login and register)
 
 const PORT = process.env.PORT || 5001;
