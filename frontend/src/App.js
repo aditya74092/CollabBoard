@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
-import Onboarding from './Onboarding'; // Import the Onboarding component
+import Onboarding from './onboarding'; // Import the Onboarding component
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
