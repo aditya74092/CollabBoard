@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
-import FormPage from './FormPage'; // Import the new FormPage component
+import Onboarding from './Onboarding'; // Import the Onboarding component
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
@@ -23,16 +23,18 @@ function App() {
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
+    const [isOnboarding, setIsOnboarding] = useState(false); // Track if the user needs onboarding
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // Register the user
     const register = async () => {
         setLoading(true);
         try {
             const res = await api.post('/auth/register', { username, password });
             console.log('User registered:', res.data);
             setMessage('User registered successfully!');
-            setIsRegistering(false);
+            setIsOnboarding(true); // Set onboarding state to true after registration
             setUsername('');
             setPassword('');
         } catch (error) {
@@ -43,6 +45,7 @@ function App() {
         }
     };
 
+    // Login the user
     const login = async () => {
         setLoading(true);
         try {
@@ -50,7 +53,8 @@ function App() {
             console.log('User logged in:', res.data);
             localStorage.setItem('token', res.data.token); // Store the token in local storage
             setAuthToken(res.data.token); // Set the token in headers
-            setIsLoggedIn(true);
+            setIsLoggedIn(true); // Set the logged-in state
+            setIsOnboarding(false); // Assume returning users have already onboarded
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
             setMessage('Error logging in.');
@@ -59,17 +63,19 @@ function App() {
         }
     };
 
+    // Logout function
     const logout = () => {
         localStorage.removeItem('token');
         setAuthToken(null);
         setIsLoggedIn(false);
+        setIsOnboarding(false); // Reset onboarding state on logout
         setMessage('');
     };
 
     return (
         <div className="app-container">
             <ToastContainer containerId="mainToastContainer" />
-            {!isLoggedIn ? (
+            {!isLoggedIn && !isOnboarding ? (
                 <div className="auth-container">
                     <h3>Welcome to Manage-Karo</h3>
                     {message && <p className="message">{message}</p>}
@@ -92,10 +98,12 @@ function App() {
                         </div>
                     )}
                 </div>
+            ) : isOnboarding ? (
+                <Onboarding /> // Render the Onboarding component for new users
             ) : (
                 <div className="logged-in-container">
                     <button className="logout-button" onClick={logout}>Logout</button>
-                    <Onboarding /> {/* Render the Onboarding component */}
+                    <FormPage /> {/* Render the main FormPage component for logged-in users */}
                 </div>
             )}
         </div>
