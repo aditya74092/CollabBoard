@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css'; // Import the new CSS file for styling
 import Onboarding from './onboarding'; // Import the Onboarding component
+import FormPage from './FormPage'; // Import the FormPage component
 
 const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'https://collabboard-backend.onrender.com'
@@ -34,6 +35,8 @@ function App() {
             const res = await api.post('/auth/register', { username, password });
             console.log('User registered:', res.data);
             setMessage('User registered successfully!');
+            localStorage.setItem('token', res.data.token); // Store token after registration
+            setAuthToken(res.data.token); // Set token in headers
             setIsOnboarding(true); // Set onboarding state to true after registration
             setUsername('');
             setPassword('');
@@ -54,7 +57,8 @@ function App() {
             localStorage.setItem('token', res.data.token); // Store the token in local storage
             setAuthToken(res.data.token); // Set the token in headers
             setIsLoggedIn(true); // Set the logged-in state
-            setIsOnboarding(false); // Assume returning users have already onboarded
+            const hasOnboarded = res.data.hasOnboarded; // Assume backend returns this info
+            setIsOnboarding(!hasOnboarded); // Set onboarding state based on backend response
         } catch (error) {
             console.error('Error logging in:', error.response ? error.response.data : error.message);
             setMessage('Error logging in.');
