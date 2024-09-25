@@ -95,7 +95,7 @@ function App() {
             ) : (
                 <div className="logged-in-container">
                     <button className="logout-button" onClick={logout}>Logout</button>
-                    <FormPage /> {/* Render the FormPage component */}
+                    <Onboarding /> {/* Render the Onboarding component */}
                 </div>
             )}
         </div>
